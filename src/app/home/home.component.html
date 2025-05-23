@@ -1,0 +1,20 @@
+<div class="forum">
+    <h2>Welcome, <a [routerLink]="['/profile']">{{currentUser.username}}!</a></h2>
+    <button (click)="logout()">Logout</button>
+
+    <form (ngSubmit)="addComment()">
+        <textarea [(ngModel)]="commentText" name="commentText" placeholder="write a comment..." required=""></textarea>
+        <button type="submit">Post</button>
+    </form>
+
+    <hr />
+
+    <h3>All comments</h3>
+    <div *ngIf="comments.length === 0">No comments yet.</div>
+
+    <div *ngFor="let comment of comments" class="comment">
+        <p><strong>{{comment.username}}</strong>({{comment.timestamp}})</p>
+        <p>{{comment.content}}</p>
+        <hr />
+    </div>
+</div>

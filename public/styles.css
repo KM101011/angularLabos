@@ -1,0 +1,122 @@
+body {
+  background: #f9f9f9;
+  font-family: Arial, sans-serif;
+  margin: 30px 10px;
+  color: #333;
+}
+
+.forum {
+  background: white;
+  max-width: 900px;
+  width: 90%;
+  margin: 0 auto 25px;
+  padding: 30px 35px 25px;
+  border-radius: 8px;
+  position: relative;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+}
+
+.forum > button {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  background: #e53935;
+  color: white;
+  border: none;
+  padding: 8px 14px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: 600;
+}
+
+h2 {
+  margin-bottom: 20px;
+  text-align: center;
+}
+
+.forum h2 a {
+  color: #1e88e5;
+  text-decoration: none;
+}
+
+.forum h2 a:hover {
+  text-decoration: underline;
+}
+
+button {
+  background: #1e88e5;
+  color: white;
+  padding: 10px;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  margin-top: 12px;
+  font-weight: 600;
+}
+
+button:hover {
+  background: #1669bb;
+}
+
+form {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+label {
+  font-weight: 600;
+}
+
+input, textarea {
+  padding: 8px 10px;
+  border: 1.5px solid #ccc;
+  border-radius: 6px;
+}
+
+p[style*="color: red;"] {
+  color: #e53935;
+  text-align: center;
+  font-weight: 600;
+  margin-top: 10px;
+}
+
+.comment {
+  background: #eee;
+  padding: 10px 14px;
+  margin-bottom: 12px;
+  border-radius: 6px;
+}
+
+.comment p:first-child {
+  font-weight: bold;
+  margin-bottom: 6px;
+}
+
+.profile, .loginForm, .registerForm {
+  background: white;
+  max-width: 400px;
+  width: 90%;
+  margin: 0 auto 25px;
+  padding: 20px 25px;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+}
+
+.profile label {
+  font-weight: 700;
+  margin-bottom: 12px;
+  display: block;
+}
+
+.profile ul {
+  list-style: none;
+  padding-left: 0;
+}
+
+.profile li {
+  background: #dfe7f1;
+  padding: 10px 14px;
+  margin-bottom: 8px;
+  border-radius: 6px;
+}

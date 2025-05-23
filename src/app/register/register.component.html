@@ -1,0 +1,31 @@
+<div class="registerForm">
+    <h2>Register</h2>
+    
+    <form #f="ngForm" (ngSubmit)="register(f)">
+        <div>
+            <label>Username:</label>
+            <input type="text" [(ngModel)]="username" name="username" required/>
+        </div>
+        <div>
+            <label>Password:</label>
+            <input type="password" [(ngModel)]="password" name="password" required/>
+        </div>
+        <div>
+            <label>Confirm password:</label>
+            <input type="password" [(ngModel)]="confirmPassword" name="confirmPassword" required/>
+        </div>
+        <div>
+            <label>Name:</label>
+            <input type="text" [(ngModel)]="name" name="name" required/>
+        </div>
+        <div>
+            <label>Email:</label>
+            <input type="text" [(ngModel)]="email" name="email" required/>
+        </div>
+
+        <button type="submit">Register!</button>
+    </form>
+
+    <p style="color: red;" *ngIf="errorMessage">{{ errorMessage }}</p>
+    <button type="button" (click)="router.navigateByUrl('/login')">Back</button>
+</div>

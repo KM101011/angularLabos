@@ -128,14 +128,14 @@ app.get('/api/comments', async (req, res) => {
   }
 });
 app.post('/api/comments', async (req, res) => {
-  const { userId, username, content } = req.body;
+  const { user_id, username, content } = req.body;
 
-  if (!userId || !username || !content) {
+  if (!user_id || !username || !content) {
     return res.status(400).json({ message: 'Missing fields' });
   }
   try {
     const conn = await pool.getConnection();
-    await conn.query('INSERT INTO comments (user_id, username, content) VALUES (?, ?, ?)', [userId, username, content]);
+    await conn.query('INSERT INTO comments (user_id, username, content) VALUES (?, ?, ?)', [user_id, username, content]);
     conn.release();
     res.status(201).json({ message: 'Comment added' });
   } catch (error) {

@@ -2,6 +2,7 @@ import { CommonModule } from '@angular/common';
 import { Component, inject } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
+import { AuthService } from '../services/auth.service';
 
 @Component({
   selector: 'app-register',
@@ -19,6 +20,7 @@ export class RegisterComponent {
   email = "";
   errorMessage = "";
   router = inject(Router);
+  authService = inject(AuthService);
 
   register(form: any){
 
@@ -37,7 +39,20 @@ export class RegisterComponent {
         return;
       }
 
-      const users = JSON.parse(localStorage.getItem('users') || '[]');
+      this.authService.errorEmitter.subscribe(msg => {
+        this.errorMessage = msg;
+      });
+
+      this.authService.register({
+        username: this.username,
+        password: this.password,
+        password2: this.confirmPassword,
+        name: this.name,
+        email: this.email
+      });
+       
+
+     /*  const users = JSON.parse(localStorage.getItem('users') || '[]');
       const existingUser = users.find((user: any) => user.username === this.username);
 
       if(existingUser){
@@ -57,6 +72,7 @@ export class RegisterComponent {
       localStorage.setItem('users', JSON.stringify(users));
       localStorage.setItem('currentUser', JSON.stringify(newUser));
 
-      this.router.navigateByUrl('/login');
+      this.router.navigateByUrl('/login'); */
   }
 }
+

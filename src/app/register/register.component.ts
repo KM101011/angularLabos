@@ -50,29 +50,6 @@ export class RegisterComponent {
         name: this.name,
         email: this.email
       });
-       
-
-     /*  const users = JSON.parse(localStorage.getItem('users') || '[]');
-      const existingUser = users.find((user: any) => user.username === this.username);
-
-      if(existingUser){
-        this.errorMessage = "Username already exists";
-        return;
-      }
-
-      const newUser = {
-        username: this.username,
-        password: this.password,
-        email: this.email,
-        name: this.name
-      }
-
-      users.push(newUser);
-
-      localStorage.setItem('users', JSON.stringify(users));
-      localStorage.setItem('currentUser', JSON.stringify(newUser));
-
-      this.router.navigateByUrl('/login'); */
   }
 }
 

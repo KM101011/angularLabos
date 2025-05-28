@@ -29,25 +29,12 @@ export class LoginComponent {
   login() {
   this.authService.login({ username: this.username, password: this.password }).subscribe({
     next: (response) => {
-      // Handle successful login (e.g. store user info, redirect)
       localStorage.setItem('currentUser', JSON.stringify(response));
       this.router.navigate(['/']);
     },
     error: (err) => {
-      this.errorMessage = 'Login failed';
+      this.errorMessage = err.error?.message || 'Login failed';
     }
   });
 }
 }
-  /* login(){
-      
-    const users = JSON.parse(localStorage.getItem('users') || '[]');
-    const existingUser = users.find((user: any) => user.username === this.username && user.password === this.password);
-
-    if(existingUser){
-      localStorage.setItem('currentUser', JSON.stringify(existingUser));
-      this.router.navigateByUrl('/');
-    }else{
-      this.errorMessage = "Invalid username or password";
-    }
-  } */

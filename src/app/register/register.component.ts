@@ -1,6 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { Component, inject } from '@angular/core';
-import { FormsModule, FormBuilder, Validators, ReactiveFormsModule } from '@angular/forms';
+import { FormsModule, FormBuilder, Validators, ReactiveFormsModule, FormControl } from '@angular/forms';
 import { Router } from '@angular/router';
 import { AuthService, RegisterRequest } from '../services/auth.service';
 
@@ -17,17 +17,26 @@ export class RegisterComponent {
   authService = inject(AuthService);
   private formBuilder = inject(FormBuilder);
 
+  public error?: boolean = false;
+
   registerForm = this.formBuilder.group({
-      username: ["", Validators.minLength(4), Validators.required],
-      password: ["", Validators.required],
-      confirmPassword: ["", Validators.required],
-      name: ["", Validators.required],
-      email: ["", Validators.required]
+      username: new FormControl<String>("", [Validators.minLength(4), Validators.required]),
+      password: new FormControl<String>("", [Validators.required]),
+      confirmPassword: new FormControl<String>("", [Validators.required]),
+      name: new FormControl("", [Validators.required]),
+      email: new FormControl("", [Validators.required])
   });
 
   register(form: any){
+    console.log(this.registerForm.controls['confirmPassword'].errors);
 
-    const credentials = this.registerForm.value as RegisterRequest;
+  
+    if(form.value.password !== form.value.confirmPassword) {
+      this.error = true;
+    }
+   
+    this.authService.register(form.value);
+
 
       /* if(!form.valid){
         this.registerForm.setErrors({invalidCredentials: "Please fill in all required fields."});
@@ -51,13 +60,5 @@ export class RegisterComponent {
          this.registerForm.setErrors({invalidCredentials: msg});
       });
  */
-      this.authService.register({
-        username: credentials.username,
-        password: credentials.password,
-        confirmPassword: credentials.confirmPassword,
-        name: credentials.name,
-        email: credentials.email
-      });
   }
 }
-

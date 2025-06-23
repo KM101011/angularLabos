@@ -4,7 +4,6 @@ import { Router } from "@angular/router";
 import { Injectable, Inject} from "@angular/core";
 import { API_URL_LOGIN, API_URL_REGISTRATION } from "../environment/enviroment";
 import { FormBuilder } from "@angular/forms";
-import { RegisterComponent } from "../register/register.component";
 
 export interface LoginRequest{
   username: string,
@@ -27,8 +26,6 @@ export class AuthService {
   isLoggedIn = false;
 
   fb = FormBuilder
-  registerComponent = Inject(RegisterComponent);
-
   errorEmitter = new Subject<string>();
 
   constructor(private http: HttpClient, private router: Router) {}
@@ -38,12 +35,6 @@ export class AuthService {
   }
 
   register(credentials: RegisterRequest) {
-
-    if (credentials.password !== credentials.confirmPassword) {
-      console.log(credentials.password, credentials.confirmPassword);
-      this.registerComponent.registerForm.setErrors({invalidCredentials: "Passwords do not match"});
-      return;
-    }
  
     this.http.post(API_URL_REGISTRATION, {
       username: credentials.username,
@@ -51,17 +42,17 @@ export class AuthService {
       password2: credentials.confirmPassword,
       email: credentials.email,
       name: credentials.name
-    }).subscribe({
+    })/* .subscribe({
       next: () => {
         this.router.navigate(['/login']);
       },
       error: (err) => {
         if (err.status === 409) {
-          this.registerComponent.registerForm.setErrors({invalidCredentials: "Username already exists"});
-        } else {
+          registerForm.controls.setErrors({invalidCredentials: "Username already exists"});
+        } else 
          this.registerComponent.registerForm.setErrors({invalidCredentials: "Error registering user"});
         }
       }
-    });
+    }); */
   }
 }

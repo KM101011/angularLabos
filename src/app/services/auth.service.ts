@@ -1,30 +1,54 @@
 import { Subject } from "rxjs";
 import { HttpClient } from "@angular/common/http";
 import { Router } from "@angular/router";
-import { Injectable } from "@angular/core";
+import { Injectable, Inject} from "@angular/core";
+import { API_URL_LOGIN, API_URL_REGISTRATION } from "../environment/enviroment";
+import { FormBuilder } from "@angular/forms";
+import { RegisterComponent } from "../register/register.component";
+
+export interface LoginRequest{
+  username: string,
+  password: string
+}
+
+export interface RegisterRequest{
+    username: string,
+    password: string,
+    confirmPassword: string,
+    name: string,
+    email: string
+}
 
 @Injectable({
   providedIn: 'root'
 })
 export class AuthService {
 
+  isLoggedIn = false;
+
+  fb = FormBuilder
+  registerComponent = Inject(RegisterComponent);
+
   errorEmitter = new Subject<string>();
 
   constructor(private http: HttpClient, private router: Router) {}
 
-   login(credentials: { username: string; password: string }) {
-  return this.http.post<any>('http://localhost:8081/login', credentials);
-}
+   login(credentials: LoginRequest) {
+    return this.http.post<any>(API_URL_LOGIN, credentials);
+  }
 
-  register(credentials: { username: string, password: string, password2: string, name: string, email: string }) {
-    if (credentials.password !== credentials.password2) {
-      this.errorEmitter.next("Passwords do not match");
+  register(credentials: RegisterRequest) {
+
+    if (credentials.password !== credentials.confirmPassword) {
+      console.log(credentials.password, credentials.confirmPassword);
+      this.registerComponent.registerForm.setErrors({invalidCredentials: "Passwords do not match"});
       return;
     }
-
-    this.http.post('http://localhost:8081/register', {
+ 
+    this.http.post(API_URL_REGISTRATION, {
       username: credentials.username,
       password: credentials.password,
+      password2: credentials.confirmPassword,
       email: credentials.email,
       name: credentials.name
     }).subscribe({
@@ -33,9 +57,9 @@ export class AuthService {
       },
       error: (err) => {
         if (err.status === 409) {
-          this.errorEmitter.next("Username already exists");
+          this.registerComponent.registerForm.setErrors({invalidCredentials: "Username already exists"});
         } else {
-          this.errorEmitter.next("Error registering user");
+         this.registerComponent.registerForm.setErrors({invalidCredentials: "Error registering user"});
         }
       }
     });

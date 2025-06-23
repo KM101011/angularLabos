@@ -1,4 +1,5 @@
 const express = require('express');
+require('dotenv').config();
 const cors = require('cors');
 const mysql = require('mysql2/promise');
 const app = express();
@@ -8,17 +9,20 @@ app.use(cors({
   origin: 'http://localhost:4200'
 }));
 
-app.use(express.json()); 
+app.use(express.json());
 
 let pool;
 
+//console.log(process.env.PORT);
+
 async function initDb() {
   pool = await mysql.createPool({
+    port: process.env.PORT,
     connectionLimit: 10,
-    host: 'localhost',
-    user: 'root',
-    password: 'ahfg567ATJ77!',  
-    database: 'labos_angular'
+    host: process.env.HOST,
+    user: process.env.USER,
+    password: process.env.PASSWORD,  
+    database: process.env.DATABASE
   });
 }
 initDb();
@@ -72,7 +76,6 @@ app.post('/login', async (req, res) => {
     }
 
     const user = users[0];
-
     if (user.password !== password) {
       conn.release();
       return res.status(401).json({ message: 'Invalid username or password' });
@@ -129,6 +132,8 @@ app.get('/api/comments', async (req, res) => {
 });
 app.post('/api/comments', async (req, res) => {
   const { user_id, username, content } = req.body;
+
+  console.log(user_id, username, content);
 
   if (!user_id || !username || !content) {
     return res.status(400).json({ message: 'Missing fields' });

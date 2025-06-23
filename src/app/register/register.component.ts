@@ -1,54 +1,62 @@
 import { CommonModule } from '@angular/common';
 import { Component, inject } from '@angular/core';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, FormBuilder, Validators, ReactiveFormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
-import { AuthService } from '../services/auth.service';
+import { AuthService, RegisterRequest } from '../services/auth.service';
 
 @Component({
   selector: 'app-register',
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, FormsModule, ReactiveFormsModule],
   templateUrl: './register.component.html',
   styleUrl: './register.component.css'
 })
 
 export class RegisterComponent {
 
-  username = "";
-  password = "";
-  confirmPassword = "";
-  name = "";
-  email = "";
-  errorMessage = "";
   router = inject(Router);
   authService = inject(AuthService);
+  private formBuilder = inject(FormBuilder);
+
+  registerForm = this.formBuilder.group({
+      username: ["", Validators.minLength(4), Validators.required],
+      password: ["", Validators.required],
+      confirmPassword: ["", Validators.required],
+      name: ["", Validators.required],
+      email: ["", Validators.required]
+  });
 
   register(form: any){
 
-      if(!form.valid){
-        this.errorMessage = "Please fill in all required fields.";
-        return;
-      }
+    const credentials = this.registerForm.value as RegisterRequest;
 
-      if(this.username.length < 4){
-        this.errorMessage = "Username must be at least 4 characters";
+      /* if(!form.valid){
+        this.registerForm.setErrors({invalidCredentials: "Please fill in all required fields."});
         return;
-      }
+      } */
 
-      if(this.password !== this.confirmPassword){
-        this.errorMessage = "Passwords do not match";
+      /* if(credentials.username.length < 4){
+        this.registerForm.setErrors({invalidCredentials: "Username must be at least 4 characters"});
+        return;
+      } */
+
+
+      /* if(this.registerForm.value.password !== this.registerForm.value.confirmPassword){
+        console.log("a");
+        this.registerForm.setErrors({invalidCredentials: "Passwords do not match"});
+        console.log("b")
         return;
       }
 
       this.authService.errorEmitter.subscribe(msg => {
-        this.errorMessage = msg;
+         this.registerForm.setErrors({invalidCredentials: msg});
       });
-
+ */
       this.authService.register({
-        username: this.username,
-        password: this.password,
-        password2: this.confirmPassword,
-        name: this.name,
-        email: this.email
+        username: credentials.username,
+        password: credentials.password,
+        confirmPassword: credentials.confirmPassword,
+        name: credentials.name,
+        email: credentials.email
       });
   }
 }

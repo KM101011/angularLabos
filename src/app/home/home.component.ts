@@ -19,9 +19,13 @@ export class HomeComponent {
   commentText = "";
   editingCommentId: number | null = null;
 
+  ngOnInit(){
+  }
+
   constructor() {
     const storedUser = localStorage.getItem('currentUser');
     if (!storedUser) {
+      console.log(storedUser)
       this.router.navigateByUrl('/login');
       return;
     }
@@ -78,7 +82,9 @@ export class HomeComponent {
   }
 
   logout() {
-    localStorage.removeItem('currentUser');
+    localStorage.removeItem('currentUser');    
+    this.currentUser = null;
+    console.log(this.currentUser, "i također", localStorage.getItem('currentUser')); 
     this.router.navigateByUrl('/login');
   }
 }

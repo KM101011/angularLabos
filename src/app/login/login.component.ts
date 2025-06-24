@@ -18,8 +18,8 @@ export class LoginComponent {
   private formBuilder = inject(FormBuilder);
 
   loginForm = this.formBuilder.group({
-    username: ['', Validators.required],
-    password: ['', Validators.required]
+    username: ['', [Validators.required]],
+    password: ['', [Validators.required]]
   });
 
    ngOnInit(): void {
@@ -27,20 +27,20 @@ export class LoginComponent {
        this.loginForm.setErrors({invalidCredentials: msg});
     });
   }
-
  
   login() {
+
   const credentials = this.loginForm.value as LoginRequest;
 
   this.authService.login(credentials).subscribe({
     next: (response) => {
       localStorage.setItem('currentUser', JSON.stringify(response));
+      this.authService.value = true;
       this.router.navigate(['/']);
-      this.authService.isLoggedIn = true;
     },
     error: (err) => {
-      this.authService.isLoggedIn = false;
-       this.loginForm.setErrors({invalidCredentials: err.error?.message || 'Login failed'});
+      this.authService.value = false;
+      this.loginForm.setErrors({invalidCredentials: err.error?.message || 'Login failed'});
     }
   });
 }

@@ -28,12 +28,14 @@ export class ProfileComponent implements OnInit {
   }
 
   if (!userId) {
-    this.router.navigateByUrl('/login');
+    //this.router.navigateByUrl('/login');
     return;
   }
   this.userService.getUserById(userId).subscribe({
     next: user => this.currentUser = user,
-    error: () => this.router.navigateByUrl('/login')
+    error: (err) => { 
+      console.log(err);
+      this.router.navigateByUrl('/login')}
   });
 }
 }

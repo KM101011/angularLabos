@@ -14,7 +14,10 @@
         <div>
             <label>Confirm password:</label>
             <input type="password" formControlName="confirmPassword" name="confirmPassword" />
-             <small *ngIf="registerForm.controls.confirmPassword.value && registerForm.controls['password'].errors != null" style="color: red;">Password isnt the same</small>
+            @if (registerForm.get('confirmPassword')?.hasError('notSame')) {
+            <br><small style="color: red;">Passwords do not match</small>
+            }
+             <!-- <small *ngIf="registerForm.controls['confirmPassword'].errors != null" style="color: red;">Password isnt the same</small> -->
             <!-- <small *ngIf="registerForm.controls['password'].errors != null">You have samo error</small> -->
         </div>
        <!--  @if (registerForm.controls['password'].errors!['required']) {
@@ -27,13 +30,12 @@
         <div>
             <label>Email:</label>
             <input type="text" formControlName="email" name="email" required/>
+            @if (registerForm.get('email')?.hasError('email')){
+                <small style="color: red;">Email is not correct</small>
+            }
         </div>
          <small *ngIf="!registerForm.valid" style="color: red;">You should fill in all the fields</small>
         <button type="submit" [disabled]="!registerForm.valid">Register!</button>
     </form>
-
-    <p>{{registerForm.errors?.['confirmPassword']}}</p>
-
-    <p style="color: red;" *ngIf="registerForm.errors?.['confirmPassword']" class="error">{{registerForm.errors?.['invalidCredentials']}}</p>
     <button type="button" (click)="router.navigateByUrl('/login')">Back</button>
 </div>

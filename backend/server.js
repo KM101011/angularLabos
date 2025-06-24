@@ -7,7 +7,7 @@ const port = 8081;
 
 app.use(cors({
   origin: 'http://localhost:4200'
-}));
+}));s
 
 app.use(express.json());
 
@@ -72,13 +72,13 @@ app.post('/login', async (req, res) => {
 
     if (users.length === 0) {
       conn.release();
-      return res.status(401).json({ message: 'Invalid username or password' });
+      return res.status(401).json({ message: 'Invalid username' });
     }
 
     const user = users[0];
     if (user.password !== password) {
       conn.release();
-      return res.status(401).json({ message: 'Invalid username or password' });
+      return res.status(401).json({ message: 'Invalid password' });
     }
 
     conn.release();

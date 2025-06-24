@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
-import { API_URL_COMMENTS } from '../environment/enviroment';
+import { API_URL } from '../environment/enviroment';
 
 export interface Comment {
   id?: number;
@@ -18,18 +18,18 @@ export class CommentService {
   constructor(private http: HttpClient) {}
 
   getComments(): Observable<Comment[]> {
-    return this.http.get<Comment[]>(API_URL_COMMENTS);
+    return this.http.get<Comment[]>(`${API_URL}/api/comments`);
   }
 
   addComment(comment: Comment): Observable<any> {
-    return this.http.post(API_URL_COMMENTS, comment);
+    return this.http.post(`${API_URL}/api/comments`, comment);
   }
 
   updateComment(commentId: number, userId: number, content: string): Observable<any> {
-    return this.http.put(`${API_URL_COMMENTS}/${commentId}`, { userId, content });
+    return this.http.put(`${API_URL}/api/comments/${commentId}`, { userId, content });
   }
 
   deleteComment(commentId: number, userId: number): Observable<any> {
-    return this.http.request('delete', `${API_URL_COMMENTS}/${commentId}`, { body: { userId } });
+    return this.http.request('delete', `${API_URL}/api/comments/${commentId}`, { body: { userId } });
   }
 }

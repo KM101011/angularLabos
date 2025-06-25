@@ -39,24 +39,7 @@ export class HomeComponent {
     commentText: ["", [Validators.required, Validators.minLength(1)]]
   });
 
- /*  editForms: {[key:number]: any} = {}
-
-  errorMessage ="";
- */
-
  loadComments() {
-
-/* this.commentService.getComments().subscribe({
-  next: data =>{
-    this.comments = data;
-    this.comments.forEach(c =>{
-      this.editForms[c.id] = this.commentForm.control(c.content, Validators.required);
-    });
-  },
-  error: err => {
-    this.errorMessage = 'Failed to load comments';
-  }
-  }); */
   this.commentService.getComments().subscribe(data => {
     this.comments = data.map(c => ({
       ...c,
@@ -67,10 +50,7 @@ export class HomeComponent {
 
   addOrUpdateComment() {
 
-    console.log("a");
 
-    console.log(this.commentForm.value.commentText);
-    this.commentText = this.commentForm.value.commentText;
     const trimmed = this.commentText.trim();
     if (!trimmed) return;
 

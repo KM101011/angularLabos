@@ -7,7 +7,7 @@ const port = 8081;
 
 app.use(cors({
   origin: 'http://localhost:4200'
-}));s
+}));
 
 app.use(express.json());
 

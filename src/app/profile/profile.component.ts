@@ -14,16 +14,17 @@ export class ProfileComponent implements OnInit {
 
   router = inject(Router);
   userService = inject(UserService);
-  authService = inject(AuthService)
 
   currentUser: UserProfile | null = null;
 
+  constructor(private authservice: AuthService){}
+
  ngOnInit() {
-  const userString = localStorage.getItem('currentUser');
-  console.log(userString);
+
+  const storedUser = this.authservice.getLoggedInUser();
   let userId: number | null = null;
-  if(userString){
-    const user = JSON.parse(userString);
+  if(storedUser){
+    const user = storedUser;
     userId = Number(user.userId);
   }
 

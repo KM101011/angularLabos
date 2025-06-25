@@ -3,6 +3,7 @@ import { HttpClient } from "@angular/common/http";
 import { Router } from "@angular/router";
 import { Injectable} from "@angular/core";
 import { API_URL } from "../environment/enviroment";
+import { LocalStorageService } from "./local-storage.service";
 
 
 export interface LoginRequest{
@@ -27,7 +28,7 @@ export class AuthService {
 
   errorEmitter = new Subject<string>();
 
-  constructor(private http: HttpClient, private router: Router) {}
+  constructor(private http: HttpClient, private router: Router, private localstorage: LocalStorageService) {}
 
    login(credentials: LoginRequest) {
     return this.http.post<any>(`${API_URL}/login`, credentials);
@@ -54,8 +55,19 @@ export class AuthService {
     });
   }
 
-  isLoggedIn(){
+  setLoggedInUser(user: any){
+    this.localstorage.set('currentUser', user);
+  }
 
-    return this.value;
+  getLoggedInUser(){
+    return this.localstorage.get('currentUser');
+  }
+
+  deleteLoggedInUser(){
+    this.localstorage.delete('currentUser');
+  }
+
+  isLoggedIn(): boolean{
+    return this.getLoggedInUser();
   }
 }

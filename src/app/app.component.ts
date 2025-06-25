@@ -1,6 +1,5 @@
 import { Component } from '@angular/core';
 import { Router, RouterOutlet } from '@angular/router';
-import { API_URL } from './environment/enviroment';
 
 @Component({
   selector: 'app-root',
@@ -16,13 +15,5 @@ export class AppComponent {
   }
 
   ngOnInit() {
-
-    /* const storedUser = localStorage.getItem('currentUser');
-    console.log(storedUser);
-    if (!storedUser) {
-      console.log(storedUser)
-      this.router.navigateByUrl('/login');
-      return;
-    } */
   }
 }

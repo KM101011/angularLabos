@@ -2,8 +2,8 @@
   <h2>Welcome, <a [routerLink]="['/profile']">{{ currentUser.username }}!</a></h2>
   <button (click)="logout()">Logout</button>
 
-  <form (ngSubmit)="addOrUpdateComment()">
-    <textarea [(ngModel)]="commentText" name="commentText" placeholder="write a comment..." required></textarea>
+  <form [formGroup]="commentForm" (ngSubmit)="addOrUpdateComment()">
+    <textarea formControlName="commentText" name="commentText" placeholder="write a comment..."></textarea>
     <button type="submit">{{ editingCommentId !== null ? 'Update' : 'Post' }}</button>
     <button type="button" *ngIf="editingCommentId !== null" (click)="cancelEdit()">Cancel</button>
   </form>

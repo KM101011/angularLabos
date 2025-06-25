@@ -22,6 +22,13 @@ export class LoginComponent {
     password: ['', [Validators.required]]
   });
 
+  constructor(){
+    const storedUser = this.authService.getLoggedInUser();
+    if(storedUser){
+      this.authService.deleteLoggedInUser();
+    }
+  }
+
    ngOnInit(): void {
     this.authService.errorEmitter.subscribe(msg => {
        this.loginForm.setErrors({invalidCredentials: msg});
@@ -34,12 +41,10 @@ export class LoginComponent {
 
   this.authService.login(credentials).subscribe({
     next: (response) => {
-      localStorage.setItem('currentUser', JSON.stringify(response));
-      this.authService.value = true;
+      this.authService.setLoggedInUser(response);
       this.router.navigate(['/']);
     },
     error: (err) => {
-      this.authService.value = false;
       this.loginForm.setErrors({invalidCredentials: err.error?.message || 'Login failed'});
     }
   });

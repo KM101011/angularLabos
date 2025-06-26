@@ -14,7 +14,6 @@ export interface Comment {
 @Injectable({ providedIn: 'root' })
 export class CommentService {
   
-
   constructor(private http: HttpClient) {}
 
   getComments(): Observable<Comment[]> {

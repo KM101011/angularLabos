@@ -17,18 +17,18 @@
      <div>No comments yet.</div>
   }
 
-  @for ( comment of comments; track comment) {
-  <div class="comment">
-    <p><strong>{{ comment.username }}</strong> ({{ comment.timestamp }})</p>
-    <p>{{ comment.content }}</p>
+  @for ( comment of comments; track comment.id) {
+    <div class="comment">
+      <p><strong>{{ comment.username }}</strong> ({{ comment.timestamp }})</p>
+      <p>{{ comment.content }}</p>
 
-    @if (comment.user_id === currentUser.userId) {
-      <div>
-      <button (click)="editComment(comment)">Edit</button>
-      <button (click)="deleteComment(comment)">Delete</button>
+      @if (comment.user_id === currentUser.userId) {
+        <div>
+        <button (click)="editComment(comment)">Edit</button>
+        <button (click)="deleteComment(comment)">Delete</button>
+      </div>
+      }
+      <hr />
     </div>
-    }
-    <hr />
-  </div>
-}
+  }
 </div>

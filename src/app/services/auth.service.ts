@@ -14,7 +14,7 @@ export interface LoginRequest{
 export interface RegisterRequest{
     username: string,
     password: string,
-    confirmPassword: string,
+    confirmPassword?: string,
     name: string,
     email: string
 }
@@ -23,8 +23,6 @@ export interface RegisterRequest{
   providedIn: 'root'
 })
 export class AuthService {
-
-  public value = false;
 
   errorEmitter = new Subject<string>();
 
@@ -35,24 +33,16 @@ export class AuthService {
   }
 
   register(credentials: RegisterRequest) {
-    //delete credentials.confirmPassword
+
+    if(credentials.password === credentials.confirmPassword) delete credentials.confirmPassword; 
+     
     this.http.post(`${API_URL}/register`, {
       username: credentials.username,
       password: credentials.password,
       password2: credentials.confirmPassword,
       email: credentials.email,
       name: credentials.name
-    }).subscribe({
-    next: () => {
-      this.router.navigate(['/login']);
-    },
-    error: (err) => {
-      if(err){
-        console.log(err);
-        console.log("Something wrong with inputing form");
-      }
-    }
-    });
+    })
   }
 
   setLoggedInUser(user: any){

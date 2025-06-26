@@ -13,25 +13,15 @@ import { AuthService } from '../services/auth.service';
 })
 export class HomeComponent {
 
-  router = inject(Router);
-  commentService = inject(CommentService);
   formbuilder = inject(FormBuilder)
 
   currentUser: any = null;
   comments: Comment[] = [];
-  commentText = "";
   editingCommentId: number | null = null;
 
-  constructor(private authservice: AuthService) {
-    
-    const storedUser = this.authservice.getLoggedInUser();
+  constructor(private authservice: AuthService, private router: Router, private commentService: CommentService) {
 
-    if (!storedUser) {
-      this.router.navigateByUrl('/login');
-      return;
-    }
-
-    this.currentUser = storedUser
+    this.currentUser = this.authservice.getLoggedInUser();
     this.loadComments();
   }
 
@@ -50,8 +40,7 @@ export class HomeComponent {
 
   addOrUpdateComment() {
 
-
-    const trimmed = this.commentText.trim();
+    const trimmed = this.commentForm.controls['commentText'].value?.trim();
     if (!trimmed) return;
 
     if (this.editingCommentId !== null) {
@@ -67,7 +56,7 @@ export class HomeComponent {
       };
       this.commentService.addComment(newComment).subscribe(() => {
         this.loadComments();
-        this.commentText = "";
+        this.commentForm.reset();
       });
     }
   }
@@ -75,12 +64,12 @@ export class HomeComponent {
   editComment(comment: Comment) {
     if (comment.user_id !== this.currentUser.userId) return;
     this.editingCommentId = comment.id!;
-    this.commentText = comment.content;
+    this.commentForm.patchValue({commentText: comment.content});
   }
 
   cancelEdit() {
     this.editingCommentId = null;
-    this.commentText = "";
+    this.commentForm.reset();
   }
 
   deleteComment(comment: Comment) {

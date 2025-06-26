@@ -34,8 +34,6 @@ export class RegisterComponent {
     return password?.value == confirmPassword?.value ? null : { 'notSame': true };
   }
 
-  
-
   register(form: any){
     this.authService.register(form.value);
   }

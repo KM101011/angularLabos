@@ -10,10 +10,4 @@ import { Router, RouterOutlet } from '@angular/router';
 export class AppComponent {
 
   title = 'AngularLabos';
-
-  constructor(private router: Router) {
-  }
-
-  ngOnInit() {
-  }
 }

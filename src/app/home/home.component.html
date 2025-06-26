@@ -1,27 +1,34 @@
 <div class="forum">
+
   <h2>Welcome, <a [routerLink]="['/profile']">{{ currentUser.username }}!</a></h2>
   <button (click)="logout()">Logout</button>
 
   <form [formGroup]="commentForm" (ngSubmit)="addOrUpdateComment()">
     <textarea formControlName="commentText" name="commentText" placeholder="write a comment..."></textarea>
     <button type="submit">{{ editingCommentId !== null ? 'Update' : 'Post' }}</button>
-    <button type="button" *ngIf="editingCommentId !== null" (click)="cancelEdit()">Cancel</button>
+    @if (editingCommentId !== null) {
+      <button type="button" (click)="cancelEdit()">Cancel</button>
+    }
   </form>
-
   <hr />
 
   <h3>All comments</h3>
-  <div *ngIf="comments.length === 0">No comments yet.</div>
+  @if (comments.length === 0) {
+     <div>No comments yet.</div>
+  }
 
-  <div *ngFor="let comment of comments" class="comment">
+  @for ( comment of comments; track comment) {
+  <div class="comment">
     <p><strong>{{ comment.username }}</strong> ({{ comment.timestamp }})</p>
     <p>{{ comment.content }}</p>
 
-    <div *ngIf="comment.user_id === currentUser.userId">
+    @if (comment.user_id === currentUser.userId) {
+      <div>
       <button (click)="editComment(comment)">Edit</button>
       <button (click)="deleteComment(comment)">Delete</button>
     </div>
-
+    }
     <hr />
   </div>
+}
 </div>

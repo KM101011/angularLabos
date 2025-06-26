@@ -15,5 +15,7 @@
         <button type="button" (click)="router.navigateByUrl('/register')">Register</button>
     </form>
 
-    <p style="color: red;" *ngIf="loginForm.errors?.['invalidCredentials']" class="error">{{loginForm.errors?.['invalidCredentials']}}</p>
+    @if (loginForm.errors?.['invalidCredentials']) {
+        <p style="color: red;" class="error">{{loginForm.errors?.['invalidCredentials']}}</p>
+    }
 </div>

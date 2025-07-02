@@ -1,5 +1,4 @@
-const CommentModel = require('../models/comment.model');
-
+const CommentModel = require("../models/comment.model");
 const CommentService = {
 
     getComments: async () => {
@@ -19,5 +18,4 @@ const CommentService = {
         await CommentModel.delete(id, userId);
     }
 }
-
-export default CommentService;
+module.exports =  CommentService;

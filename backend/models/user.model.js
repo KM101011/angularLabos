@@ -1,9 +1,9 @@
-const db = require('../server');
+const db = require('../db.config');
 
 const UserModel = {
-    getUserById: (id) => {
-        return db.promise().query('SELECT id, username, email, name FROM users WHERE id = ?', [id]);
+    getUserById: async (id) => {
+        return await db.execute("SELECT id, username, email, name FROM users WHERE id = ?", [id]);
     }
 }
 
-export default UserModel;
+module.exports =  UserModel;

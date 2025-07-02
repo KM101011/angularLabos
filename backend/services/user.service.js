@@ -1,9 +1,10 @@
-const UserModel = require('../models/user.model')
+const UserModel = require("../models/user.model");
 
 const UserService = {
     getUserById: async (id) => {
-        const users = await UserModel.getUserById(id);
+        const rows = await UserModel.getUserById(id);
+        return rows;
     }
 }
 
-export default UserService;
+module.exports =  UserService;

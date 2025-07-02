@@ -8,8 +8,12 @@ import { API_URL } from '../environment/enviroment';
   providedIn: 'root'
 })
 export class UserService {
-  private http = inject(HttpClient); 
-  getUserById(userId: number): Observable<UserProfile> {
-  return this.http.get<UserProfile>(`${API_URL}/api/users/${userId}`);
-}
+
+  constructor(private http: HttpClient){}
+
+  //private http = inject(HttpClient); 
+  getUserById(userId: number): Observable<any> {
+    console.log(userId)
+    return this.http.get<any>(`${API_URL}/api/users/${userId}`);
+  }
 }

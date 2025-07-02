@@ -1,23 +1,23 @@
-const db = require('../server');
+const db = require('../db.config');
 
 const CommentModel = {
 
-    getAll: () => {
-        return db.promise().query('SELECT * FROM comments ORDER BY timestamp DESC');
+    getAll: async () => {
+        return await db.execute('SELECT * FROM comments ORDER BY timestamp DESC');
     },
 
-    create: (comment) => {
+    create: async (comment) => {
         const { user_id, username, content } = comment;
-        return db.promise().query('INSERT INTO comments (user_id, username, content) VALUES (?, ?, ?)', [user_id, username, content]);
+        return await db.execute('INSERT INTO comments (user_id, username, content) VALUES (?, ?, ?)', [user_id, username, content]);
     },
 
-    update: (id, userId, content) => {
-        return db.promise().query('UPDATE comments SET content = ? WHERE id = ? AND user_id = ?', [content, id, userId]);
+    update: async (id, userId, content) => {
+       return await db.execute('UPDATE comments SET content = ? WHERE id = ? AND user_id = ?', [content, id, userId]);
     },
 
-    delete: (id, userId) => {
-        return db.promise().query('DELETE FROM comments WHERE id = ? AND user_id = ?', [id, userId]);
+    delete: async (id, userId) => {
+        return await db.execute('DELETE FROM comments WHERE id = ? AND user_id = ?', [id, userId]);
     }
 }
 
-export default CommentModel;
+module.exports =  CommentModel;

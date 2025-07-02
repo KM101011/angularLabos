@@ -1,34 +1,36 @@
-import { Router } from "express";
+const express = require('express');
+const router = express.Router();
+const AuthService = require("../services/auth.service");
 
-const router = Router();
+const conn = require("../db.config");
 
-//nedovrs
 router.post('/register', async (req, res) => {
+
   const { username, password, email, name } = req.body;
 
   if (!username || !password || !email || !name) {
     return res.status(400).json({ message: 'All fields are required' });
   }
 
+  console.log(username, password, email, name);
   try {
-    const conn = await pool.getConnection();
-    const [users] = await conn.query('SELECT * FROM users WHERE username = ?', [username]);
+     const [result] = await AuthService.register(username, password, email, name); 
 
-    if (users.length > 0) {
-      conn.release();
+    //const [result] = await (await conn).execute('INSERT INTO users (username, password, email, name) VALUES (?, ?, ?, ?)', [username, password, email, name]);
+
+    console.log(result);
+    if (result.insertId <= 0) {
       return res.status(409).json({ message: 'Username already exists' });
     }
 
-    const [result] = await conn.query('INSERT INTO users (username, password, email, name) VALUES (?, ?, ?, ?)', [username, password, email, name]);
-    conn.release();
     return res.status(201).json({ message: 'User registered', userId: result.insertId });
-
   } catch (error) {
+    console.log(error);
     return res.status(500).json({ message: 'Registration failed' });
   }
 })
 
-router.post('/login', async (req, res) => {
+router.post('/login', async (req, res) => { 
   const { username, password } = req.body;
 
   if (!username || !password) {
@@ -36,21 +38,17 @@ router.post('/login', async (req, res) => {
   }
 
   try {
-    const conn = await pool.getConnection();
-    const [users] = await conn.query('SELECT * FROM users WHERE username = ?', [username]);
-
+    const [users] = await AuthService.login(username); 
+    //const [users] = await (await conn).execute('SELECT * FROM users WHERE username = ?', [username]);
     if (users.length === 0) {
-      conn.release();
       return res.status(401).json({ message: 'Invalid username' });
     }
 
     const user = users[0];
     if (user.password !== password) {
-      conn.release();
       return res.status(401).json({ message: 'Invalid password' });
     }
 
-    conn.release();
     return res.status(200).json({ 
       message: 'Login successful', 
       userId: user.id, 
@@ -60,6 +58,8 @@ router.post('/login', async (req, res) => {
     });
 
   } catch (error) {
+    console.log(error);
     return res.status(500).json({ message: 'Login failed' });
   }
 })
+module.exports = router;

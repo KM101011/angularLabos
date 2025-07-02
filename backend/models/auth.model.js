@@ -1,11 +1,13 @@
-const db = require('../server')
+const db = require('../db.config')
 
 const AuthModel = {
-    checkLogin: (username) => {
-         return db.promise().query('SELECT * FROM users WHERE username = ?', [username]);
-    }
+    login: async (username) => {
+         return await db.execute('SELECT * FROM users WHERE username = ?', [username]);
+    },
 
-    //nedovr
+    register: (username, password, email, name) => {
+        return db.promise().query('INSERT INTO users (username, password, email, name) VALUES (?, ?, ?, ?)', [username, password, email, name]);
+    }
 }
 
-export default AuthModel;
+module.exports = AuthModel;

@@ -1,6 +1,6 @@
-import { Router } from "express";
-
-const router = Router();
+const express = require('express');
+const router = express.Router();
+const CommentService = require("../services/comment.service");
 
 router.get('/api/comments', async (req, res) => {
     try {
@@ -42,3 +42,5 @@ router.delete('/api/comments/:id', async (req, res) => {
         res.status(500).json({ message: 'Failed to delete comment' });
     }
 })
+
+module.exports = router;

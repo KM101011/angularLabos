@@ -1,9 +1,12 @@
 const express = require('express');
 require('dotenv').config();
 const cors = require('cors');
-const mysql = require('mysql2/promise');
 const app = express();
 const port = 8081;
+
+const AuthController = require('./controllers/auth.controller');
+const CommentController = require ('./controllers/comment.controller');
+const UserController = require('./controllers/user.controller');
 
 app.use(cors({
   origin: 'http://localhost:4200'
@@ -11,27 +14,35 @@ app.use(cors({
 
 app.use(express.json());
 
-let pool;
-
-//console.log(process.env.PORT);
-
-async function initDb() {
-  pool = await mysql.createPool({
-    port: process.env.PORT,
-    connectionLimit: 10,
-    host: process.env.HOST,
-    user: process.env.USER,
-    password: process.env.PASSWORD,  
-    database: process.env.DATABASE
-  });
-}
-initDb();
 
 app.get('/', (req, res) => {
   res.send('Backend works');
 });
 
-//REGISTRACIJA
+app.use('/', AuthController);
+app.use('/', CommentController);
+app.use('/', UserController);
+
+// app.use('**', (req, res) => {
+//   res.status(404).send({
+//     success: false,
+//     message: 'Api not found'
+//   })
+// })
+
+app.use((error, req, res, next) => {
+  res.status(500).send({
+    success: false,
+    message: error.message,
+    stack: error.stack
+  })
+})
+
+app.listen(port, () => {
+  console.log(`Server radi na http://localhost:${port}`);
+});
+
+/* //REGISTRACIJA
 app.post('/register', async (req, res) => {
   const { username, password, email, name } = req.body;
 
@@ -186,10 +197,4 @@ app.delete('/api/comments/:id', async (req, res) => {
     res.status(500).json({ message: 'Server error' });
   }
 });
-
-
-
-
-app.listen(port, () => {
-  console.log(`Server radi na http://localhost:${port}`);
-});
+ */

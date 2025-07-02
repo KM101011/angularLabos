@@ -1,18 +1,18 @@
-import { Router } from "express";
+const express = require('express');
+const router = express.Router();
+const UserService = require("../services/user.service");
 
-const router = Router();
 
-router.get("/api/users/:id", () => async (req, res) => {
-
+router.get('/api/users/:id', async (req, res) => {
     const id = parseInt(req.params.id);
-    const { userId, content } = req.body;
+
     try {
-        await CommentService.updateComment(id, userId, content);
-        res.json({ message: 'Comment updated' });
+        const [result] = await UserService.getUserById(id);
+        res.status(200).json({message: 'got user', data: result[0]});
     } catch (error) {
          res.status(500).json({ message: 'Failed to update comment' });
     }
 })
 
-export default router;
 
+module.exports = router;

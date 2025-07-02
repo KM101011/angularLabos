@@ -28,21 +28,21 @@ export class AuthService {
 
   constructor(private http: HttpClient, private router: Router, private localstorage: LocalStorageService) {}
 
-   login(credentials: LoginRequest) {
+  login(credentials: LoginRequest) {
     return this.http.post<any>(`${API_URL}/login`, credentials);
   }
 
-  register(credentials: RegisterRequest) {
+  register(registerCredentials: RegisterRequest) {
 
-    if(credentials.password === credentials.confirmPassword) delete credentials.confirmPassword; 
+    delete registerCredentials.confirmPassword; 
+    console.log(registerCredentials);
      
-    this.http.post(`${API_URL}/register`, {
+    return this.http.post<any>(`${API_URL}/register`, registerCredentials); /* {
       username: credentials.username,
       password: credentials.password,
-      password2: credentials.confirmPassword,
-      email: credentials.email,
-      name: credentials.name
-    })
+      name: credentials.name,
+      email: credentials.email
+    }); */
   }
 
   setLoggedInUser(user: any){

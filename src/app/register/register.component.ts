@@ -4,6 +4,7 @@ import { FormsModule, FormBuilder, Validators, ReactiveFormsModule } from '@angu
 import { Router } from '@angular/router';
 import { AuthService } from '../services/auth.service';
 import { AbstractControl, ValidationErrors } from '@angular/forms';
+import { RegisterRequest } from '../services/auth.service';
 
 @Component({
   selector: 'app-register',
@@ -33,8 +34,20 @@ export class RegisterComponent {
     const confirmPassword = control.parent?.get('confirmPassword');
     return password?.value == confirmPassword?.value ? null : { 'notSame': true };
   }
+  
+  register(){
 
-  register(form: any){
-    this.authService.register(form.value);
+    const credentials = this.registerForm.value as RegisterRequest
+
+    this.authService.register(credentials).subscribe({
+      next: (response) => {
+        console.log(response);
+        this.router.navigate(['/login']);
+      },
+      error: (err) => {
+        console.log(err);
+        this.registerForm.setErrors({invalidCredentials: err.error?.message || 'Registration failed'});
+      }
+    });  
   }
 }

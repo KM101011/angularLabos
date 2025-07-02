@@ -28,12 +28,16 @@ export class ProfileComponent implements OnInit {
     userId = Number(user.userId);
   }
 
-  if (!userId) {
-    //this.router.navigateByUrl('/login');
-    return;
-  }
-  this.userService.getUserById(userId).subscribe({
-    next: user => this.currentUser = user,
+   console.log(userId)
+  // if (!userId) {
+  //   //this.router.navigateByUrl('/login');
+  //   return;
+  // }
+  this.userService.getUserById(userId!).subscribe({
+    next: (response) => {
+      console.log(response);
+      this.currentUser = response.data;
+    },
     error: (err) => { 
       console.log(err);
       this.router.navigateByUrl('/login')}

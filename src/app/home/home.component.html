@@ -31,4 +31,24 @@
       <hr />
     </div>
   }
+
+  <nz-table #basicTable [nzData]="comments">
+  <thead>
+    <tr>
+      <th>Comments</th>
+      <th>Action</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let comment of comments">
+      <td>{{comment.content}}</td>
+      <td>
+         <button (click)="showDeleteConfirm(comment)">Delete</button>
+        <nz-divider nzType="vertical"></nz-divider>
+        <button (click)="editCommentPopUp(comment)">Edit</button>
+       <!--  <button (click)="router.navigateByUrl('/edit')">Edit</button> -->
+      </td>
+    </tr>
+  </tbody>
+</nz-table>
 </div>

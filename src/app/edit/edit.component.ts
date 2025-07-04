@@ -1,12 +1,12 @@
-import { Component, Input, Injectable } from '@angular/core';
+import { Component, Injectable } from '@angular/core';
 import { NzModalRef, NZ_MODAL_DATA } from 'ng-zorro-antd/modal';
 import { inject } from '@angular/core';
-import { Validators, FormBuilder } from '@angular/forms';
-import { HomeComponent } from '../home/home.component';
+import { Validators, FormBuilder, ReactiveFormsModule } from '@angular/forms';
+import {NzMessageService} from 'ng-zorro-antd/message';
 
 @Component({
   selector: 'app-edit',
-  imports: [HomeComponent],
+  imports: [ReactiveFormsModule],
   templateUrl: './edit.component.html',
   styleUrl: './edit.component.css'
 })
@@ -17,10 +17,12 @@ import { HomeComponent } from '../home/home.component';
 export class EditComponent {
 
     readonly nzModalData = inject(NZ_MODAL_DATA);
+    readonly ModalRef = inject(NzModalRef);
     formbuilder = inject(FormBuilder);
-    home = inject(HomeComponent);
 
     commentData: any;
+
+    constructor(private message: NzMessageService){}
 
     commentForm = this.formbuilder.group({
     commentText: ["", [Validators.required, Validators.minLength(1)]]
@@ -28,10 +30,22 @@ export class EditComponent {
 
    
     ngOnInit(){
-      this.commentData = this.nzModalData.commentData;
-      console.log(this.commentData);
 
-       this.commentForm.patchValue({commentText: this.commentData.content});
+      /* setTimeout(() =>{ */
+        this.commentData = this.nzModalData.commentData;
+        this.commentForm.patchValue({commentText: this.commentData});
+      /* }) */
+    }
+
+    close(type: string){
+      console.log(this.commentForm.value.commentText);
+      this.ModalRef.close(this.commentForm.value.commentText);
+
+      if(type == 'success'){
+        this.message.create(type, `Updating message: ${type}`);
+      }
+      else
+         this.message.create(type, `Updating message: ${type}`);
     }
 
 }

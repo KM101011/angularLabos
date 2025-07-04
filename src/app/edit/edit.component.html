@@ -1,4 +1,6 @@
-<div>
+<form nz-form [formGroup]="commentForm">
     <h3>Edit</h3>
     <textarea nz-input formControlName="commentText">{{commentData}}</textarea>
-</div>
+    <button (click)="close('success')">Save</button>
+    <button (click)="close('warning')">Cancel</button>
+</form>

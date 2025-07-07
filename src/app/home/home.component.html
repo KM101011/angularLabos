@@ -6,9 +6,6 @@
   <form [formGroup]="commentForm" (ngSubmit)="addOrUpdateComment()">
     <textarea formControlName="commentText" name="commentText" placeholder="write a comment..."></textarea>
     <button type="submit">Post</button>
-    <!-- @if (editingCommentId !== null) {
-      <button type="button" (click)="cancelEdit()">Cancel</button>
-    } -->
   </form>
   <hr />
 
@@ -16,21 +13,6 @@
   @if (comments.length === 0) {
      <div>No comments yet.</div>
   }
-
-  <!-- @for ( comment of comments; track comment.id) {
-    <div class="comment">
-      <p><strong>{{ comment.username }}</strong> ({{ comment.timestamp }})</p>
-      <p>{{ comment.content }}</p>
-
-      @if (comment.user_id === currentUser.userId) {
-        <div>
-        <button (click)="editComment(comment)">Edit</button>
-        <button (click)="deleteComment(comment)">Delete</button>
-      </div>
-      }
-      <hr />
-    </div>
-  } -->
 
   <nz-table #basicTable [nzData]="comments">
   <thead>

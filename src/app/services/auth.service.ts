@@ -37,12 +37,7 @@ export class AuthService {
     delete registerCredentials.confirmPassword; 
     console.log(registerCredentials);
      
-    return this.http.post<any>(`${API_URL}/register`, registerCredentials); /* {
-      username: credentials.username,
-      password: credentials.password,
-      name: credentials.name,
-      email: credentials.email
-    }); */
+    return this.http.post<any>(`${API_URL}/register`, registerCredentials);
   }
 
   setLoggedInUser(user: any){

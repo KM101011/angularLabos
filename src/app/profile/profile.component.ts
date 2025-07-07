@@ -3,6 +3,7 @@ import { Router } from '@angular/router';
 import { UserService } from '../services/user.service';
 import { UserProfile } from './userProfile';
 import { AuthService } from '../services/auth.service';
+import { NzMessageService } from 'ng-zorro-antd/message';
 
 @Component({
   selector: 'app-profile',
@@ -17,22 +18,18 @@ export class ProfileComponent implements OnInit {
 
   currentUser: UserProfile | null = null;
 
-  constructor(private authservice: AuthService){}
+  constructor(private authservice: AuthService, private message: NzMessageService){}
 
  ngOnInit() {
 
   const storedUser = this.authservice.getLoggedInUser();
   let userId: number | null = null;
+
   if(storedUser){
     const user = storedUser;
     userId = Number(user.userId);
   }
 
-   console.log(userId)
-  // if (!userId) {
-  //   //this.router.navigateByUrl('/login');
-  //   return;
-  // }
   this.userService.getUserById(userId!).subscribe({
     next: (response) => {
       console.log(response);
@@ -40,7 +37,8 @@ export class ProfileComponent implements OnInit {
     },
     error: (err) => { 
       console.log(err);
-      this.router.navigateByUrl('/login')}
+      this.router.navigateByUrl('/login');
+      this.message.error(err.message || "Greška pri prikazu korisnika");}
   });
 }
 }

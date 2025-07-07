@@ -46,7 +46,6 @@ export class HomeComponent {
       nzFooter: null 
     }).afterClose.subscribe({
       next: (result) => { 
-        console.log(result, "pliz");
         if(result){
           this.editingCommentId = comment.id!;
           if (this.editingCommentId !== null) {
@@ -99,12 +98,6 @@ export class HomeComponent {
       });
     }
   }
-
-  /* editComment(comment: Comment) {
-    if (comment.user_id !== this.currentUser.userId) return;
-    this.editingCommentId = comment.id!;
-    this.commentForm.patchValue({commentText: comment.content});
-  } */
 
   cancelEdit() {
     this.editingCommentId = null;

@@ -5,6 +5,7 @@ import { Router } from '@angular/router';
 import { AuthService } from '../services/auth.service';
 import { AbstractControl, ValidationErrors } from '@angular/forms';
 import { RegisterRequest } from '../services/auth.service';
+import { NzMessageService } from 'ng-zorro-antd/message';
 
 @Component({
   selector: 'app-register',
@@ -20,6 +21,8 @@ export class RegisterComponent {
   private formBuilder = inject(FormBuilder);
 
   public error?: boolean = false;
+
+  constructor(private message: NzMessageService){}
 
   registerForm = this.formBuilder.group({
       username: ["", [Validators.minLength(4), Validators.required]],
@@ -47,6 +50,7 @@ export class RegisterComponent {
       error: (err) => {
         console.log(err);
         this.registerForm.setErrors({invalidCredentials: err.error?.message || 'Registration failed'});
+        this.message.error(err.message || "Greška kod registracije korisnika");
       }
     });  
   }

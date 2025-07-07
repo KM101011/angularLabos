@@ -27,25 +27,16 @@ export class EditComponent {
     commentForm = this.formbuilder.group({
     commentText: ["", [Validators.required, Validators.minLength(1)]]
     });
-
    
     ngOnInit(){
 
-      /* setTimeout(() =>{ */
         this.commentData = this.nzModalData.commentData;
         this.commentForm.patchValue({commentText: this.commentData});
-      /* }) */
     }
 
     close(type: string){
-      console.log(this.commentForm.value.commentText);
+      
       this.ModalRef.close(this.commentForm.value.commentText);
-
-      if(type == 'success'){
-        this.message.create(type, `Updating message: ${type}`);
-      }
-      else
-         this.message.create(type, `Updating message: ${type}`);
     }
 
 }

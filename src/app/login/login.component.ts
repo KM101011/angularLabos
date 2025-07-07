@@ -4,6 +4,7 @@ import { FormBuilder, FormsModule, Validators, ReactiveFormsModule } from '@angu
 import { CommonModule } from '@angular/common';
 import { AuthService } from '../services/auth.service';
 import { LoginRequest } from '../services/auth.service';
+import { NzMessageService } from 'ng-zorro-antd/message';
 
 @Component({
   selector: 'app-login',
@@ -22,7 +23,7 @@ export class LoginComponent {
     password: ['', [Validators.required]]
   });
 
-  constructor(){
+  constructor(private message: NzMessageService){
     const storedUser = this.authService.getLoggedInUser();
     if(storedUser){
       this.authService.deleteLoggedInUser();
@@ -46,6 +47,7 @@ export class LoginComponent {
     },
     error: (err) => {
       this.loginForm.setErrors({invalidCredentials: err.error?.message || 'Login failed'});
+      this.message.error(err.message || "Greška pri loginu")
     }
   });
 }

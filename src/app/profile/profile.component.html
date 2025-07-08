@@ -6,5 +6,5 @@
         <li>Name: {{currentUser?.name}}</li>
     </ul>
 
-    <button type="button" (click)="router.navigateByUrl('/')">Back</button>
+    <a [routerLink]="['/']"><button type="button" style="color: white;">Back</button></a>
 </div>

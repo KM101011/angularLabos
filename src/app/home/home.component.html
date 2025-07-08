@@ -1,6 +1,6 @@
 <div class="forum">
 
-  <h2>Welcome, <a [routerLink]="['/profile']">{{ currentUser.username }}!</a></h2>
+  <h2>Welcome, <a [routerLink]="['/profile']">{{ currentUser?.username }}</a></h2>
   <button (click)="logout()">Logout</button>
 
   <form [formGroup]="commentForm" (ngSubmit)="addOrUpdateComment()">

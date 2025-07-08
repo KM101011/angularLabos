@@ -2,7 +2,6 @@ import { Component, Injectable } from '@angular/core';
 import { NzModalRef, NZ_MODAL_DATA } from 'ng-zorro-antd/modal';
 import { inject } from '@angular/core';
 import { Validators, FormBuilder, ReactiveFormsModule } from '@angular/forms';
-import {NzMessageService} from 'ng-zorro-antd/message';
 
 @Component({
   selector: 'app-edit',
@@ -18,11 +17,9 @@ export class EditComponent {
 
     readonly nzModalData = inject(NZ_MODAL_DATA);
     readonly ModalRef = inject(NzModalRef);
-    formbuilder = inject(FormBuilder);
+    private formbuilder = inject(FormBuilder);
 
-    commentData: any;
-
-    constructor(private message: NzMessageService){}
+    commentData: string | null = null;
 
     commentForm = this.formbuilder.group({
     commentText: ["", [Validators.required, Validators.minLength(1)]]
@@ -34,8 +31,8 @@ export class EditComponent {
         this.commentForm.patchValue({commentText: this.commentData});
     }
 
-    close(type: string){
-      
+    close(){
+
       this.ModalRef.close(this.commentForm.value.commentText);
     }
 

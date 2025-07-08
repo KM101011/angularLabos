@@ -1,7 +1,7 @@
 <div class="registerForm">
     <h2>Register</h2>
     
-    <form  [formGroup]="registerForm" (ngSubmit)="register()">
+    <form [formGroup]="registerForm" (ngSubmit)="register()">
         <div>
             <label>Username:</label>
             <input type="text" formControlName="username" name="username"/><br>
@@ -27,14 +27,15 @@
         <div>
             <label>Email:</label>
             <input type="text" formControlName="email" name="email"/>
-            @if (registerForm.get('email')?.hasError('email')){
+        </div>
+        @if (registerForm.get('email')?.hasError('email')){
                 <small style="color: red;">Email is not correct</small>
             }
-        </div>
-        @if (!registerForm.valid) {
+        @if (!registerForm.valid && registerForm.dirty) {
             <small style="color: red;">You should fill in all the fields</small>
+            
         }
         <button type="submit" [disabled]="!registerForm.valid">Register!</button>
     </form>
-    <button type="button" (click)="router.navigateByUrl('/login')">Back</button>
+    <a [routerLink]="['/login']"><button type="button">Back</button></a>
 </div>

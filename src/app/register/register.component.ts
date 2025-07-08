@@ -1,7 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { Component, inject } from '@angular/core';
 import { FormsModule, FormBuilder, Validators, ReactiveFormsModule } from '@angular/forms';
-import { Router } from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
 import { AuthService } from '../services/auth.service';
 import { AbstractControl, ValidationErrors } from '@angular/forms';
 import { RegisterRequest } from '../services/auth.service';
@@ -9,20 +9,17 @@ import { NzMessageService } from 'ng-zorro-antd/message';
 
 @Component({
   selector: 'app-register',
-  imports: [CommonModule, FormsModule, ReactiveFormsModule],
+  imports: [CommonModule, FormsModule, ReactiveFormsModule, RouterLink],
   templateUrl: './register.component.html',
   styleUrl: './register.component.css'
 })
 
 export class RegisterComponent {
 
-  router = inject(Router);
-  authService = inject(AuthService);
+  private router = inject(Router);
+  private authService = inject(AuthService);
   private formBuilder = inject(FormBuilder);
-
-  public error?: boolean = false;
-
-  constructor(private message: NzMessageService){}
+  private message = inject(NzMessageService);
 
   registerForm = this.formBuilder.group({
       username: ["", [Validators.minLength(4), Validators.required]],
@@ -46,11 +43,12 @@ export class RegisterComponent {
       next: (response) => {
         console.log(response);
         this.router.navigate(['/login']);
+        this.message.success("Registration successful");
       },
       error: (err) => {
         console.log(err);
         this.registerForm.setErrors({invalidCredentials: err.error?.message || 'Registration failed'});
-        this.message.error(err.message || "Greška kod registracije korisnika");
+        this.message.error(err.message || "Registration failed");
       }
     });  
   }

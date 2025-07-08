@@ -1,10 +1,8 @@
-import { Subject } from "rxjs";
 import { HttpClient } from "@angular/common/http";
-import { Router } from "@angular/router";
-import { Injectable} from "@angular/core";
+import { inject, Injectable} from "@angular/core";
 import { API_URL } from "../environment/enviroment";
 import { LocalStorageService } from "./local-storage.service";
-
+import { User } from "../profile/user";
 
 export interface LoginRequest{
   username: string,
@@ -24,9 +22,10 @@ export interface RegisterRequest{
 })
 export class AuthService {
 
-  errorEmitter = new Subject<string>();
+  private http = inject(HttpClient);
+  private localstorage = inject(LocalStorageService)
 
-  constructor(private http: HttpClient, private router: Router, private localstorage: LocalStorageService) {}
+  constructor() {}
 
   login(credentials: LoginRequest) {
     return this.http.post<any>(`${API_URL}/login`, credentials);
@@ -34,13 +33,11 @@ export class AuthService {
 
   register(registerCredentials: RegisterRequest) {
 
-    delete registerCredentials.confirmPassword; 
-    console.log(registerCredentials);
-     
+    delete registerCredentials.confirmPassword;
     return this.http.post<any>(`${API_URL}/register`, registerCredentials);
   }
 
-  setLoggedInUser(user: any){
+  setLoggedInUser(user: User){
     this.localstorage.set('currentUser', user);
   }
 

@@ -6,7 +6,7 @@ const AuthModel = {
     },
 
     register: (username, password, email, name) => {
-        return db.promise().query('INSERT INTO users (username, password, email, name) VALUES (?, ?, ?, ?)', [username, password, email, name]);
+        return db.execute('INSERT INTO users (username, password, email, name) VALUES (?, ?, ?, ?)', [username, password, email, name]);
     }
 }
 

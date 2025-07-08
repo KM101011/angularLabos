@@ -9,6 +9,7 @@ import { NzDividerModule } from 'ng-zorro-antd/divider'
 import { NzModalModule, NzModalService } from 'ng-zorro-antd/modal';
 import { EditComponent } from '../edit/edit.component';
 import { NzMessageService } from 'ng-zorro-antd/message';
+import { User } from '../profile/user';
 
 @Component({
   selector: 'app-home',
@@ -18,16 +19,21 @@ import { NzMessageService } from 'ng-zorro-antd/message';
 })
 export class HomeComponent {
 
-  formbuilder = inject(FormBuilder);
-  modal = inject(NzModalService);
-  router = inject(Router);
+  private formbuilder = inject(FormBuilder);
+  private modal = inject(NzModalService);
+  private router = inject(Router);
+  private authservice = inject(AuthService);
+  private message = inject(NzMessageService);
+  private commentservice = inject(CommentService);
 
-  currentUser: any = null;
+  currentUser: User | null = null;
   comments: Comment[] = [];
   editingCommentId: number | null = null;
 
-  constructor(private authservice: AuthService, 
-    private commentService: CommentService, private message: NzMessageService) {
+  constructor() {}
+
+  ngOnInit(){
+
     this.currentUser = this.authservice.getLoggedInUser();
     this.loadComments();
   }
@@ -36,8 +42,22 @@ export class HomeComponent {
     commentText: ["", [Validators.required, Validators.minLength(1)]]
   });
 
-  editCommentPopUp(comment: any){
-    console.log(comment);
+  loadComments() {
+    this.commentservice.getComments().subscribe({
+      next: (data) => {
+        this.comments = data;
+      },
+      error: (err) => {
+        console.log(err);
+        this.message.error(err.message || "Error editing comment")
+      }
+    });
+  } 
+
+  editCommentPopUp(comment: Comment){
+
+    console.log(this.currentUser);
+
     const modal = this.modal.create({
       nzContent: EditComponent,
       nzData: {
@@ -46,10 +66,11 @@ export class HomeComponent {
       nzFooter: null 
     }).afterClose.subscribe({
       next: (result) => { 
+
         if(result){
           this.editingCommentId = comment.id!;
           if (this.editingCommentId !== null) {
-            this.commentService.updateComment(this.editingCommentId, this.currentUser.userId, result).subscribe(() => {
+            this.commentservice.updateComment(this.editingCommentId, this.currentUser?.userId!, result).subscribe(() => {
             this.loadComments();
             this.commentForm.reset();
             });
@@ -59,40 +80,23 @@ export class HomeComponent {
     });
   }
 
- loadComments() {
-  this.commentService.getComments().subscribe({
-    next: (data) => {
-      this.message.success("Success");
-      this.comments = data.map(c => ({
-      ...c,
-      userId: c.user_id
-      }));
-    },
-    error: (err) => {
-      console.log(err);
-      this.message.error(err.message || "Greška pri editiranju komentara")
-    }
-  });
-}
-
   addOrUpdateComment() {
 
-    const trimmed = this.commentForm.controls['commentText'].value?.trim();
+    const trimmed = this.commentForm.value.commentText?.trim();
     if (!trimmed) return;
 
     if (this.editingCommentId !== null) {
-      this.commentService.updateComment(this.editingCommentId, this.currentUser.userId, trimmed).subscribe(() => {
+      this.commentservice.updateComment(this.editingCommentId, this.currentUser?.userId!, trimmed).subscribe(() => {
         this.loadComments();
         this.cancelEdit();
       });
     } else {
       const newComment: Comment = {
-        user_id: this.currentUser.userId,
-        username: this.currentUser.username,
+        user_id: this.currentUser?.userId!,
+        username: this.currentUser?.username!,
         content: trimmed
       };
-      this.commentService.addComment(newComment).subscribe(() => {
-
+      this.commentservice.addComment(newComment).subscribe(() => {
         this.loadComments();
         this.commentForm.reset();
       });
@@ -112,14 +116,18 @@ export class HomeComponent {
       nzOkType: 'primary',
       nzOkDanger: true,
       nzOnOk: () =>  this.deleteComment(comment),
-      nzCancelText: 'No',
-      nzOnCancel: () => this.cancelEdit()
+      nzCancelText: 'No'
     }); 
   }
 
   deleteComment(comment: Comment) {
-    if (comment.user_id !== this.currentUser.userId) return;
-    this.commentService.deleteComment(comment.id!, this.currentUser.userId).subscribe(() => this.loadComments());
+
+    console.log(comment.user_id, this.currentUser?.userId)
+
+    console.log(comment);
+
+    if (comment.user_id !== this.currentUser?.userId) return;
+    this.commentservice.deleteComment(comment.id!, this.currentUser.userId).subscribe(() => this.loadComments());
   } 
 
   logout() {

@@ -16,8 +16,6 @@ router.post('/register', async (req, res) => {
   try {
      const [result] = await AuthService.register(username, password, email, name); 
 
-    //const [result] = await (await conn).execute('INSERT INTO users (username, password, email, name) VALUES (?, ?, ?, ?)', [username, password, email, name]);
-
     console.log(result);
     if (result.insertId <= 0) {
       return res.status(409).json({ message: 'Username already exists' });
@@ -39,7 +37,6 @@ router.post('/login', async (req, res) => {
 
   try {
     const [users] = await AuthService.login(username); 
-    //const [users] = await (await conn).execute('SELECT * FROM users WHERE username = ?', [username]);
     if (users.length === 0) {
       return res.status(401).json({ message: 'Invalid username' });
     }

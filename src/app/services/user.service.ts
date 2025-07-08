@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { inject, Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { API_URL } from '../environment/enviroment';
@@ -8,10 +8,11 @@ import { API_URL } from '../environment/enviroment';
 })
 export class UserService {
 
-  constructor(private http: HttpClient){}
-   
+  private http = inject(HttpClient);
+
+  constructor(){}
+
   getUserById(userId: number): Observable<any> {
-    console.log(userId)
     return this.http.get<any>(`${API_URL}/api/users/${userId}`);
   }
 }

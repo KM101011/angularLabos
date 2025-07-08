@@ -1,44 +1,44 @@
 import { Component, inject, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
 import { UserService } from '../services/user.service';
-import { UserProfile } from './userProfile';
+import { User } from './user'; 
 import { AuthService } from '../services/auth.service';
 import { NzMessageService } from 'ng-zorro-antd/message';
 
 @Component({
   selector: 'app-profile',
-  imports: [],
+  imports: [RouterLink],
   templateUrl: './profile.component.html',
   styleUrl: './profile.component.css'
 })
 export class ProfileComponent implements OnInit {
 
-  router = inject(Router);
-  userService = inject(UserService);
+  private router = inject(Router);
+  private userservice = inject(UserService);
+  private authservice = inject(AuthService);
+  private message = inject(NzMessageService);
 
-  currentUser: UserProfile | null = null;
+  currentUser: User | null = null;
 
-  constructor(private authservice: AuthService, private message: NzMessageService){}
+  constructor(){}
 
- ngOnInit() {
+  ngOnInit() {
 
-  const storedUser = this.authservice.getLoggedInUser();
-  let userId: number | null = null;
+    this.currentUser = this.authservice.getLoggedInUser();
 
-  if(storedUser){
-    const user = storedUser;
-    userId = Number(user.userId);
+    if(this.currentUser){
+
+      this.userservice.getUserById(this.currentUser.userId).subscribe({
+        next: (response) => {
+          console.log(response);
+          this.currentUser = response.data;
+        },
+        error: (err) => { 
+          console.log(err);
+          this.router.navigateByUrl('/login');
+          this.message.error(err.message || "Error showing users");
+        }
+      });
+    }
   }
-
-  this.userService.getUserById(userId!).subscribe({
-    next: (response) => {
-      console.log(response);
-      this.currentUser = response.data;
-    },
-    error: (err) => { 
-      console.log(err);
-      this.router.navigateByUrl('/login');
-      this.message.error(err.message || "Greška pri prikazu korisnika");}
-  });
-}
 }

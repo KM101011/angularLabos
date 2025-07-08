@@ -1,5 +1,5 @@
 import { HttpClient } from '@angular/common/http';
-import { Injectable } from '@angular/core';
+import { inject, Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { API_URL } from '../environment/enviroment';
 
@@ -11,10 +11,14 @@ export interface Comment {
   timestamp?: string;
 }
 
-@Injectable({ providedIn: 'root' })
+@Injectable({
+  providedIn: 'root'
+})
 export class CommentService {
-  
-  constructor(private http: HttpClient) {}
+
+  private http = inject(HttpClient);
+
+  constructor() {}
 
   getComments(): Observable<Comment[]> {
     return this.http.get<Comment[]>(`${API_URL}/api/comments`);
